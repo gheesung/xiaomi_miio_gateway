@@ -89,16 +89,16 @@ class XiaomiGateway(MediaPlayerEntity):
             ATTR_STATE_PROPERTY: 'pause'
         }
 
-    async def _try_command(self, mask_error, func, *args, **kwargs):
+    def _try_command(self, mask_error, func, *args, **kwargs):
         """Call a device command handling error messages."""
         from miio import DeviceException
         try:
-            result = await self.hass.async_add_job(
+            result = self.hass.async_add_job(
                 partial(func, *args, **kwargs))
 
             _LOGGER.info("Response received from Gateway: %s", result)
 
-            return result[0] == "ok"
+            return True
         except DeviceException as exc:
             _LOGGER.error(mask_error, exc)
             return False
@@ -133,50 +133,50 @@ class XiaomiGateway(MediaPlayerEntity):
         """Flag media player features that are supported."""
         return SUPPORT_XIAOMI_GATEWAY_FM
 
-    async def turn_off(self):
-        result = await self._try_command(
+    def turn_off(self):
+        result = self._try_command(
             "Turning the Gateway off failed.", self._device.send,
             'play_fm', ['off'])
 
-    async def turn_on(self):
+    def turn_on(self):
         """Wake the Gateway back up from sleep."""
-        result = await self._try_command(
-            "Turning the Gateway on failed.", self._device.send,
+        result = self._try_command(
+            "Turning the Gateway off failed.", self._device.send,
             'play_fm', ['on'])
 
-    async def volume_up(self):
+    def volume_up(self):
         """Increase volume by one."""
         volume = round(self._volume * 100) + 1
-        result = await self._try_command(
+        result = self._try_command(
             "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
 
-    async def media_next_track(self):
+    def media_next_track(self):
         """Send next track command."""
-        result = await self._try_command(
+        result = self._try_command(
             "Turning the Gateway volume failed.", self._device.send,
             'play_fm', ['next'])
 
-    async def volume_down(self):
+    def volume_down(self):
         """Decrease volume by one."""
         volume = round(self._volume * 100) - 1
-        result = await self._try_command(
+        result = self._try_command(
             "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
 
-    async def set_volume_level(self, volume):
+    def set_volume_level(self, volume):
         volset = round(volume * 100)
-        result = await self._try_command(
+        result = self._try_command(
             "Setting the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volset])
 
-    async def mute_volume(self, mute):
+    def mute_volume(self, mute):
         """Send mute command."""
         volume = 10
         if self._muted == False:
             volume = 0
 
-        result = await self._try_command(
+        result = self._try_command(
             "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
         if result:
