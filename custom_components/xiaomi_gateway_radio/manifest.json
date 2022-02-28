@@ -2,6 +2,8 @@
   "domain": "xiaomi_gateway_radio",
   "name": "Xiaomi Gateway Radio",
   "version": "0.1",
+  "config_flow": false,
+  "iot_class": "local_polling",
   "documentation": "https://github.com/h4v1nfun/xiaomi_miio_gateway",
   "dependencies": [],
   "codeowners": [
