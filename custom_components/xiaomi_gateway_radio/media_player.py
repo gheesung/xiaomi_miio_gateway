@@ -20,6 +20,7 @@ ATTR_HARDWARE_VERSION = 'hardware_version'
 
 DEFAULT_NAME = "Xiaomi Gateway Radio"
 DATA_KEY = 'media_player.xiaomi_gateway_radio'
+DOMAIN = "xiaomi_miio_gateway_radio"
 
 ATTR_STATE_PROPERTY = 'state_property'
 ATTR_STATE_VALUE = 'state_value'
